@@ -20,8 +20,7 @@ using namespace std;
 #define W 0
 
 
-class SearchTree
-{
+class SearchTree{
     private:
 	struct TreeNode{
 		int row;           //row location on map
