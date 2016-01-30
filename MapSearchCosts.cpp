@@ -5,7 +5,9 @@
 **                                                                   **
 ** Program that reads in a 2D text map, then searches for the best   **
 ** path to a destination coordinate using breadth-first, lowest-cost **
-** and A* searches.                                                  **
+** and A* searches.  NOTE: The map's width, height, starting         **
+** coordinate, and destination coordinate are the first six numbers  **
+** in map.txt                                                        **
 ***********************************************************************
 **********************************************************************/
 
