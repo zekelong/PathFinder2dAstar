@@ -40,7 +40,7 @@ void SearchTree::AddNodes(){
 			newPtr->totalCost = 9999999;      //cost of path from start node
 			newPtr->Parent = NULL;
 			newPtr->Par1 = parent1;
-			newPtr->Par2 = parent2;  //(will be changed to NULL if in column 0)
+			newPtr->Par2 = parent2; //(will be changed to NULL if in column 0)
 			newPtr->Ptr1 = NULL;
 			newPtr->Ptr2 = NULL;
 
@@ -71,14 +71,14 @@ void SearchTree::AddNodes(){
 				tmpPtr = parent1;                    
 				while(tmpPtr){
 					if(newPtr->column == tmpPtr->column){
-						newPtr->Par1 = tmpPtr;          //assign correct Par1 
+						newPtr->Par1 = tmpPtr;    //assign correct Par1 
 						break;
 					}
 					tmpPtr = tmpPtr->Par2; 
 				}
 			}
 
-			parent2 = newPtr;    //make parent2 the preceding node in the row
+			parent2 = newPtr;   //make parent2 the preceding node in the row
 
 			/*************************************************************
 			*        make newPtr->Par(1 or 2) point to newPtr            *
@@ -91,7 +91,6 @@ void SearchTree::AddNodes(){
 
 			tmpPtr = newPtr;
 		}
-		
 		// make parent1 the last item of each row 
 		//(it will be corrected in next iteration of the loop)
 		parent1 = tmpPtr;         
@@ -168,23 +167,23 @@ int SearchTree::BreadthFirst(){
 *****************************************************************************/
 int SearchTree::LowestCost(){
 	time_t timeLC = clock();
-	numCellsExplored = 0;         //ensures explored cell count starts at zero 
+	numCellsExplored = 0;    //ensures explored cell count starts at zero 
 	TreePtr t;
 	Queue Q2;
 
-	t = FindStart(rootPtr);                          //find start node in tree
+	t = FindStart(rootPtr);                     //find start node in tree
 	if(t != NULL){
-		t->totalCost = 0;                           //start node has zero cost
+		t->totalCost = 0;                  //start node has zero cost
 		Q2.Enqueue(t);
 		while(! Q2.IsEmpty()){          //search for goal until queue is empty         
 			t = Q2.Dequeue();
 
-			/****************************************************
-			*             Check if goal is reached              *
-			****************************************************/
-			if( (t->row == goalY)&&(t->column == goalX) ){   //GOAL IS REACHED
-				timeLC = clock() - timeLC;             //record time of search
-				MarkCurrentPath(t);                        //mark the path
+			/****************************************************************
+			*                  Check if goal is reached                     *
+			****************************************************************/
+			if( (t->row == goalY)&&(t->column == goalX) ){  //GOAL IS REACHED
+				timeLC = clock() - timeLC;        //record time of search
+				MarkCurrentPath(t);                       //mark the path
 				cout << "LOWEST COST SEARCH\n";
 				cout << "Number of explored cells: " << 
 					numCellsExplored << endl;
@@ -196,7 +195,7 @@ int SearchTree::LowestCost(){
 			else{         
 				//CHECK FIRST POINTER
 				if( (t->Ptr1)&&(t->row < (height-1))&&(t->Ptr1->cost != W)&&
-												  (t->Ptr1->checked != 1) ){
+					(t->Ptr1->checked != 1) ){
 					if(t->totalCost + t->Ptr1->cost < t->Ptr1->totalCost){
 						t->Ptr1->totalCost = t->totalCost + t->Ptr1->cost;
 						t->Ptr1->Parent = t;
@@ -246,21 +245,21 @@ int SearchTree::LowestCost(){
 *****************************************************************************/
 int SearchTree::A_Star(){
 	time_t timeAStar = clock();
-	numCellsExplored = 0;            //explored cell count starts at zero 
+	numCellsExplored = 0;             //explored cell count starts at zero 
 	TreePtr t;
 	Queue Q3;
 
-	t = FindStart(rootPtr);          //find start node in tree
+	t = FindStart(rootPtr);            //find start node in tree
 	if(t != NULL){
-		t->totalCost = 0;            //start node has zero cost
+		t->totalCost = 0;          //start node has zero cost
 		Q3.PriorityEnqueue(t);
-		while(! Q3.IsEmpty()){        //search for goal until queue is empty           
+		while(! Q3.IsEmpty()){     //search for goal until queue is empty           
 			t = Q3.Dequeue();
 
-			/********************************************************
-			*               CHECK IF GOAL IS REACHED               *
-			********************************************************/
-			if(t->manhatDist == 0){                          //GOAL IS REACHED
+			/****************************************************************
+			*                    CHECK IF GOAL IS REACHED                   *
+			****************************************************************/
+			if(t->manhatDist == 0){                         //GOAL IS REACHED
 				timeAStar = clock() - timeAStar;
 				MarkCurrentPath(t);        //mark the path
 				cout << "A* SEARCH\n";
@@ -273,7 +272,7 @@ int SearchTree::A_Star(){
 			else{         
 				//CHECK FIRST POINTER
 				if( (t->Ptr1)&&(t->row < (height-1))&&(t->Ptr1->cost != W)&&
-												(t->Ptr1->checked != 1) ){
+					(t->Ptr1->checked != 1) ){
 					if(t->totalCost + t->Ptr1->cost < t->Ptr1->totalCost){
 						t->Ptr1->totalCost = t->totalCost + t->Ptr1->cost;
 						t->Ptr1->Parent = t;
@@ -284,10 +283,10 @@ int SearchTree::A_Star(){
 
 				//CHECK SECOND POINTER
 				if( (t->Ptr2)&&(t->column < (width-1))&&(t->Ptr2->cost != W)&&
-													(t->Ptr2->checked != 1) ){
+					(t->Ptr2->checked != 1) ){
 					if(t->totalCost + t->Ptr2->cost < t->Ptr2->totalCost){
-					t->Ptr2->totalCost = t->totalCost + t->Ptr2->cost;
-					t->Ptr2->Parent = t;
+						t->Ptr2->totalCost = t->totalCost + t->Ptr2->cost;
+						t->Ptr2->Parent = t;
 					}
 					GetHeuristicVal(t->Ptr2);
 					Q3.PriorityEnqueue(t->Ptr2);
@@ -295,7 +294,7 @@ int SearchTree::A_Star(){
 
 				//CHECK THIRD POINTER
 				if( (t->Par2)&&(t->column > 0)&&(t->Par2->cost != W)&&
-											(t->Par2->checked != 1) ){
+					(t->Par2->checked != 1) ){
 					if(t->totalCost + t->Par2->cost < t->Par2->totalCost){
 						t->Par2->totalCost = t->totalCost + t->Par2->cost;
 						t->Par2->Parent = t;
@@ -306,7 +305,7 @@ int SearchTree::A_Star(){
 
 				//CHECK FOURTH POINTER
 				if( (t->Par1)&&(t->row > 0)&&(t->Par1->cost != W)&&
-											(t->Par1->checked != 1) ){
+					(t->Par1->checked != 1) ){
 					if(t->totalCost + t->Par1->cost < t->Par1->totalCost){
 						t->Par1->totalCost = t->totalCost + t->Par1->cost;
 						t->Par1->Parent = t;
@@ -314,7 +313,7 @@ int SearchTree::A_Star(){
 					GetHeuristicVal(t->Par1);
 					Q3.PriorityEnqueue(t->Par1);
 				}
-			}		//end of else-statement
+			}                        //end of else-statement
 
 			t->checked = 1;          //t cannot be visited again
 		 
@@ -342,13 +341,13 @@ int SearchTree::GetHeuristicVal(TreePtr& t){
 int SearchTree::Queue::Enqueue(TreePtr& t){
 	if(t){
 		count++;  
-		numCellsExplored++;              //increment explored cell count
+		numCellsExplored++;            //increment explored cell count
 		QueuePtr n = new QueueNode;
 
-		n->dataPtr = t;                  //assign values to new QueueNode
+		n->dataPtr = t;               //assign values to new QueueNode
 		n->next = NULL;
 
-		if(head == NULL){                 //add to front if queue is empty
+		if(head == NULL){             //add to front if queue is empty
 			head = n;
 			tail = head;
 			return 1;
@@ -372,10 +371,10 @@ int SearchTree::Queue::PriorityEnqueue(TreePtr& t)
 		QueuePtr n, prev, curr;
 
 		n = new QueueNode;
-		n->dataPtr = t;                  //assign values to new QueueNode
+		n->dataPtr = t;               //assign values to new QueueNode
 		n->next = NULL;
 
-		if(head == NULL){                 //add to front if queue is empty
+		if(head == NULL){             //add to front if queue is empty
 			head = n;
 			tail = head;
 		}
@@ -417,7 +416,6 @@ SearchTree::TreePtr& SearchTree::Queue::Dequeue(){
 		if(head == tail)
 			tail = head; 
 		count--;
-
 		return p->dataPtr;
 	}
 }
@@ -430,7 +428,6 @@ SearchTree::TreePtr& SearchTree::FindStart(TreePtr& t){
 	if(t){
 		if( (t->row == startY)&&(t->column == startX) )
 			return t;
-
 		FindStart(t->Ptr2);
 	}
 } 
